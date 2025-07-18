@@ -5,7 +5,7 @@
 using namespace std;
 const int inf = 0x3f3f3f3f;
 const ll INF = 0x3f3f3f3f3f3f3f3f;
-const ll N = 1e6;
+const ll MOD = 1e6;
 int main() {
     int n, q;
     cin >> n >> q;
