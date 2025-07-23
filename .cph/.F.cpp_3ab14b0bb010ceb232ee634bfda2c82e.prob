@@ -1,1 +1,0 @@
-{"name":"Local: F","url":"d:\\Workplace\\ACM\\CPP\\2025summer\\newcoder\\7.17\\F.cpp","tests":[{"id":1752728854368,"input":"3\n5 2\n10000\n5 3\n10000\n10 1\n1000000100","output":"1\n0\n4"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\Workplace\\ACM\\CPP\\2025summer\\newcoder\\7.17\\F.cpp","group":"local","local":true}
