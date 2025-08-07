@@ -1,5 +1,5 @@
 // Author: QHZY
-// Create_Time: 2025/08/07 20:36:09
+// Create_Time: 2025/08/07 14:25:43
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -61,28 +61,18 @@ using pq_max = priority_queue<T>;
 template <class T>
 using pq_min = priority_queue<T, vector<T>, greater<T>>;
 
-#define FOR1(a) for (ll _ = 0; _ < ll(a); _++)
-#define FOR2(i, a) for (ll i = 0; i < ll(a); i++)
-#define FOR3(i, a, b) for (ll i = a; i < ll(b); i++)
-#define FOR4(i, a, b, c) for (ll i = a; i < ll(b); i += (c))
-#define FOR1_R(a) for (ll _ = (a) - 1; _ >= ll(0); _--)
-#define FOR2_R(i, a) for (ll i = (a) - 1; i >= ll(0); i--)
-#define FOR3_R(i, a, b) for (ll i = (a) - 1; i >= ll(b); i--)
-#define FOR4_R(i, a, b, c) for (ll i = (a) - 1; i >= ll(b); i -= (c))
-#define overload4(a, b, c, d, e, ...) e
-#define FOR(...) overload4(__VA_ARGS__, FOR4, FOR3, FOR2, FOR1)(__VA_ARGS__)
-#define FOR_R(...) overload4(__VA_ARGS__, FOR4_R, FOR3_R, FOR2_R, FOR1_R)(__VA_ARGS__)
-
+#define FOR0(a) for (ll _ = 0; _ < ll(a); _++)
+#define FOR1(a) for (ll _ = 1; _ <= ll(a); _++)
+#define FOR0_R(a) for (ll _ = (a) - 1; _ >= ll(0); _--)
+#define FOR0_R(a) for (ll _ = (a); _ > ll(0); _--)
 #define all(x) x.begin(), x.end()
 #define rall(x) x.rbegin(), x.rend()
-#define size(x) ll(x.size())
-
+#define len(x) ll(x.size())
 #define elif else if
-#define endl '\n'
-#define mp make_pair
-#define mt make_tuple
 #define pb push_back
 #define eb emplace_back
+#define mp make_pair
+#define mt make_tuple
 #define fi first
 #define se second
 
@@ -90,16 +80,72 @@ mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 const ll INF = 0x3f3f3f3f3f3f3f3f;
 
 /* ----- ----- ----- main ----- ----- ----- */
-
-void init() {
+vector<int> num(10);
+vector<vector<int>> state(22);
+vector<int> visited(1 << 22);
+int chuo;
+void pre() {
+    num[0] = (1 << 7) - 1 - (1 << 3);
+    num[1] = (1 << 2) + (1 << 5);
+    num[2] = (1) + (1 << 2) + (1 << 3) + (1 << 4) + (1 << 6);
+    num[3] = (1) + (1 << 2) + (1 << 3) + (1 << 5) + (1 << 6);
+    num[4] = (1 << 1) + (1 << 3) + (1 << 2) + (1 << 5);
+    num[5] = (1) + (1 << 1) + (1 << 3) + (1 << 5) + (1 << 6);
+    num[6] = (1 << 7) - 1 - (1 << 2);
+    num[7] = (1) + (1 << 2) + (1 << 5);
+    num[8] = (1 << 7) - 1;
+    num[9] = (1 << 7) - 1 - (1 << 4);
+    int total = (1 << 21);
+    for (int i = 0; i < total; i++) {
+        int te = i;
+        int cnt = __builtin_popcount(i);
+        state[cnt].eb(i);
+    }
+}
+bool jud(int x, vi &xx, vi &sz, int m) {
+    for (auto mark : state[x]) {
+        chuo++;
+        int i = 0;
+        for (; i < (int)xx.size(); i++) {
+            int temp = mark & sz[xx[i]];
+            if (visited[temp] == chuo)
+                break;
+            visited[temp] = chuo;
+        }
+        if (i == xx.size())
+            return 1;
+    }
+    return 0;
 }
 void work() {
+    int n, m;
+    cin >> n >> m;
+    vi xx(n);
+    vi sz(pow(10, m));
+    for (int i = 0; i < n; i++) {
+        cin >> xx[i];
+        int te = xx[i];
+        for (int j = 0; j < m; j++) {
+            sz[xx[i]] = sz[xx[i]] << 7;
+            sz[xx[i]] |= num[te % 10];
+            te /= 10;
+        }
+    }
+    int l = 0, r = 7 * m;
+    while (l <= r) {
+        int mid = (l + r) / 2;
+        if (jud(mid, xx, sz, m))
+            r = mid - 1;
+        else
+            l = mid + 1;
+    }
+    cout << l << endl;
 }
 signed main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    init();
+    pre();
     int T = 1;
     cin >> T;
     while (T--)

@@ -9,7 +9,7 @@ const ll INF = 0x3f3f3f3f3f3f3f3f;
 const ll MOD = 5e5 + 10;
 const ll MOD = 998244353;
 int pow2[MOD];
-void precompute() {
+void pre() {
     pow2[0] = 1;
     for (int i = 1; i < MOD; ++i) {
         pow2[i] = (pow2[i - 1] * 2) % MOD;
@@ -59,7 +59,7 @@ signed main() {
     cout.tie(nullptr);
     int _ = 1;
     cin >> _;
-    precompute();
+    pre();
     while (_--)
         work();
     return 0;
