@@ -1,5 +1,5 @@
 #include <stdio.h>
-int N = 52; // 边界值通常略大于数据范围
+#define N 52 // 边界值通常略大于数据范围
 int max(int a, int b) {
     return a > b ? a : b; // 取最大值
 }

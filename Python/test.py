@@ -1,45 +1,91 @@
-import os
-import re
+import random
 
-def add_number_to_filenames(directory, increment=756):
-    """
-    将指定目录下所有纯数字文件名（不含扩展名）的数字加上指定增量
-    
-    :param directory: 要处理的目录路径
-    :param increment: 要增加的数字，默认为756
-    """
-    # 编译匹配纯数字文件名的正则表达式
-    pattern = re.compile(r'^(\d+)(\..*)?$')
-    
-    for filename in os.listdir(directory):
-        match = pattern.match(filename)
-        if match:
-            # 提取数字部分和扩展名
-            number_str = match.group(1)
-            extension = match.group(2) if match.group(2) else ''
-            
-            try:
-                original_num = int(number_str)
-                new_num = original_num + increment
-                new_filename = f"{new_num}{extension}"
-                
-                # 构建完整路径
-                old_path = os.path.join(directory, filename)
-                new_path = os.path.join(directory, new_filename)
-                
-                # 重命名文件
-                os.rename(old_path, new_path)
-                print(f"Renamed: {filename} -> {new_filename}")
-            except ValueError:
-                print(f"Skipping {filename} - not a valid number")
+def calculate_old_tax(income):
+    if income <= 2000:
+        return 0
+    elif 2001 <= income <= 4000:
+        return income * 5 // 100
+    elif 4001 <= income <= 8000:
+        return income * 10 // 100
+    elif 8001 <= income <= 15000:
+        return income * 15 // 100
+    else:
+        return income * 20 // 100
+
+def calculate_new_tax(income):
+    if income <= 500:
+        return 0
+    elif 501 <= income <= 2500:
+        return income * 10 // 100
+    elif 2501 <= income <= 5000:
+        return income * 15 // 100
+    elif 5001 <= income <= 9000:
+        return income * 20 // 100
+    else:
+        return income * 25 // 100
+
+def generate_test_case_for_interval(interval):
+    T = random.randint(4, 10)  # Each interval test case has 1 input
+    test_cases = []
+    for _ in range(T):
+        income = random.randint(interval[0] // 20, interval[1] // 20) * 20
+        old_tax = calculate_old_tax(income)
+        new_tax = calculate_new_tax(income)
+        if old_tax == 0:
+            output = -1
         else:
-            print(f"Skipping {filename} - doesn't match pattern")
+            output = new_tax
+        test_cases.append((old_tax, output))
+    return T, test_cases
+
+def generate_random_test_case(max_income=20000):
+    T = random.randint(4, 10)  # 1 to 5 inputs per random test case
+    test_cases = []
+    for _ in range(T):
+        income = random.randint(0, max_income // 20) * 20
+        old_tax = calculate_old_tax(income)
+        new_tax = calculate_new_tax(income)
+        if old_tax == 0:
+            output = -1
+        else:
+            output = new_tax
+        test_cases.append((old_tax, output))
+    return T, test_cases
+
+def main():
+    # Key income intervals to cover
+    intervals = [
+        (0, 2000),      # 0-2000
+        (2001, 2500),   # 2001-2500
+        (2501, 4000),   # 2501-4000
+        (4001, 5000),  # 4001-5000
+        (5001, 8000),   # 5001-8000
+        (8001, 9000),   # 8001-9000
+        (9001, 15000),  # 9001-15000
+        (15001, 500000) # 15001+
+    ]
+    
+    # Generate test cases for each interval
+    for i in range(8):
+        T, test_cases = generate_test_case_for_interval(intervals[i])
+        with open(f"{i+1}.in", "w") as fin:
+            fin.write(f"{T}\n")
+            for case in test_cases:
+                fin.write(f"{case[0]}\n")
+        with open(f"{i+1}.out", "w") as fout:
+            for case in test_cases:
+                fout.write(f"{case[1]}\n")
+    
+    # Generate random test cases for the last 2 files
+    for i in range(8, 10):
+        T, test_cases = generate_random_test_case()
+        with open(f"{i+1}.in", "w") as fin:
+            fin.write(f"{T}\n")
+            for case in test_cases:
+                fin.write(f"{case[0]}\n")
+        with open(f"{i+1}.out", "w") as fout:
+            for case in test_cases:
+                fout.write(f"{case[1]}\n")
 
 if __name__ == "__main__":
-    # 使用示例
-    target_directory = "G:\\Temp\\3224403794\\universal\\material\\ui\\driver"
-    if os.path.isdir(target_directory):
-        add_number_to_filenames(target_directory)
-        print("处理完成!")
-    else:
-        print("错误: 指定的路径不是一个有效目录")
+    main()

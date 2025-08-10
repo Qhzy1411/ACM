@@ -1,5 +1,5 @@
 // Author: QHZY
-// Create_Time: 2025/08/08 01:09:42
+// Create_Time: 2025/08/08 16:56:43
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -93,8 +93,78 @@ const ll INF = 0x3f3f3f3f3f3f3f3f;
 
 void init() {
 }
+struct Point {
+    int x, y, v;
+};
+int solve_1d(const vi &a, int W, int n_coords) {
+    if (W <= 0) {
+        return 0;
+    }
+    vi pre(n_coords + 1, 0);
+    for (int i = 0; i < n_coords; i++) {
+        pre[i + 1] = pre[i] + a[i];
+    }
+    int maxsum = 0;
+    deque<int> dq;
+    dq.pb(0);
+    for (int i = 1; i <= n_coords; i++) {
+        if (!dq.empty() && dq.front() < i - W) {
+            dq.pop_front();
+        }
+        if (!dq.empty()) {
+            maxsum = max(maxsum, pre[i] - pre[dq.front()]);
+        }
+        while (!dq.empty() && pre[dq.back()] >= pre[i]) {
+            dq.pop_back();
+        }
+        dq.pb(i);
+    }
+    return maxsum;
+}
 void work() {
-    
+    int n;
+    int k;
+    cin >> n >> k;
+    map<pii, int> point_map;
+    for (int i = 0; i < n; i++) {
+        int x, y, v;
+        cin >> x >> y >> v;
+        point_map[{x, y}] += v;
+    }
+    vc<Point> points;
+    vi all_x, all_y;
+    for (auto const &[coord, val] : point_map) {
+        points.pb({coord.first, coord.second, val});
+        all_x.pb(coord.first);
+        all_y.pb(coord.second);
+    }
+    sort(all_x.begin(), all_x.end());
+    all_x.erase(unique(all_x.begin(), all_x.end()), all_x.end());
+    sort(all_y.begin(), all_y.end());
+    all_y.erase(unique(all_y.begin(), all_y.end()), all_y.end());
+    int nx = size(all_x);
+    int ny = size(all_y);
+    vvc<pii> points_by_y(ny);
+    for (const auto &p : points) {
+        int x_idx = lower_bound(all_x.begin(), all_x.end(), p.x) - all_x.begin();
+        int y_idx = lower_bound(all_y.begin(), all_y.end(), p.y) - all_y.begin();
+        points_by_y[y_idx].pb({x_idx, p.v});
+    }
+    int ans = 0;
+    for (int i = 0; i < ny; i++) {
+        vi col_sum(nx, 0);
+        for (int j = i; j < ny; j++) {
+            for (const auto &p : points_by_y[j]) {
+                col_sum[p.first] += p.second;
+            }
+            int height = all_y[j] - all_y[i] + 1;
+            if (height > k)
+                continue;
+            int max_width = k / height;
+            ans = max(ans, solve_1d(col_sum, max_width, nx));
+        }
+    }
+    cout << ans << endl;
 }
 signed main() {
     ios::sync_with_stdio(false);

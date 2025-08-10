@@ -1,5 +1,5 @@
 // Author: QHZY
-// Create_Time: 2025/08/08 01:09:42
+// Create_Time: 2025/08/07 22:34:11
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -94,7 +94,28 @@ const ll INF = 0x3f3f3f3f3f3f3f3f;
 void init() {
 }
 void work() {
-    
+    int n;
+    cin >> n;
+    int val = -1;
+    bool flag = true;
+    FOR(i, n) {
+        int x;
+        cin >> x;
+        if (x == -1) {
+            continue;
+        }
+        if (x == 0) {
+            flag = false;
+        }
+        if (val == -1) {
+            val = x;
+        } else {
+            if (x != val) {
+                flag = false;
+            }
+        }
+    }
+    YES(flag);
 }
 signed main() {
     ios::sync_with_stdio(false);

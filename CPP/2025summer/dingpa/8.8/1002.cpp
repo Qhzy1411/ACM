@@ -1,5 +1,5 @@
 // Author: QHZY
-// Create_Time: 2025/08/08 01:09:42
+// Create_Time: 2025/08/08 14:39:09
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -94,7 +94,60 @@ const ll INF = 0x3f3f3f3f3f3f3f3f;
 void init() {
 }
 void work() {
-    
+    int n;
+    cin >> n;
+    vi q_orig(n), r_orig(n), s_orig(n);
+    vi q_coords(n), r_coords(n), s_coords(n);
+    FOR(i, n) {
+        cin >> q_orig[i] >> r_orig[i] >> s_orig[i];
+        q_coords[i] = q_orig[i];
+        r_coords[i] = r_orig[i];
+        s_coords[i] = s_orig[i];
+    }
+    sort(all(q_coords));
+    sort(all(r_coords));
+    sort(all(s_coords));
+    int low = -n, high = n, opt_lambda = -n;
+    while (low <= high) {
+        int mid_lambda = low + (high - low) / 2;
+        int idx_L = (n + mid_lambda + 1) / 2 - 1;
+        if (idx_L < 0 || idx_L >= n) {
+            if (idx_L < 0)
+                low = mid_lambda + 1;
+            else
+                high = mid_lambda - 1;
+            continue;
+        }
+        i128 sum_L = (i128)q_coords[idx_L] + r_coords[idx_L] + s_coords[idx_L];
+        if (sum_L <= 0) {
+            opt_lambda = mid_lambda;
+            low = mid_lambda + 1;
+        } else {
+            high = mid_lambda - 1;
+        }
+    }
+    int idx_L = (n + opt_lambda + 1) / 2 - 1;
+    int idx_R = (n + opt_lambda) / 2;
+    int qL = q_coords[idx_L], qR = q_coords[idx_R];
+    int rL = r_coords[idx_L], rR = r_coords[idx_R];
+    int sL = s_coords[idx_L], sR = s_coords[idx_R];
+    int qc = qL, rc = rL, sc = sL;
+    int diff = -(qc + rc + sc);
+    int inc = min(diff, qR - qc);
+    qc += inc;
+    diff -= inc;
+    inc = min(diff, rR - rc);
+    rc += inc;
+    diff -= inc;
+    inc = min(diff, sR - sc);
+    sc += inc;
+    i128 ans = 0;
+    FOR(i, n) {
+        ans += abs(qc - q_orig[i]);
+        ans += abs(rc - r_orig[i]);
+        ans += abs(sc - s_orig[i]);
+    }
+    cout << (ll)(ans / 2) << endl;
 }
 signed main() {
     ios::sync_with_stdio(false);

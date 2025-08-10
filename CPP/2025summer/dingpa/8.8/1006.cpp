@@ -1,5 +1,5 @@
 // Author: QHZY
-// Create_Time: 2025/08/08 01:09:42
+// Create_Time: 2025/08/08 13:12:44
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -94,7 +94,26 @@ const ll INF = 0x3f3f3f3f3f3f3f3f;
 void init() {
 }
 void work() {
-    
+    int k, n, a, b, c, d;
+    cin >> k >> n >> a >> b >> c >> d;
+    int l = ((d * k + c * n - 1) / (c * n));
+    int cheng = (d * k / (c * n)) + 1;
+    int ans_fz = c * cheng, ans_fm = d;
+    int g = __gcd(ans_fm, ans_fz);
+    ans_fm /= g;
+    ans_fz /= g;
+    if (k * b >= a * l * n) {
+        int now_fz = k * (l + 1);
+        int now_fm = l * n;
+        int g = __gcd(now_fm, now_fz);
+        now_fm /= g;
+        now_fz /= g;
+        if (now_fz * ans_fm > now_fm * ans_fz) {
+            ans_fm = now_fm;
+            ans_fz = now_fz;
+        }
+    }
+    cout << ans_fz << '/' << ans_fm << endl;
 }
 signed main() {
     ios::sync_with_stdio(false);

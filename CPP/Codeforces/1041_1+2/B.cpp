@@ -1,5 +1,5 @@
 // Author: QHZY
-// Create_Time: 2025/08/08 01:09:42
+// Create_Time: 2025/08/07 22:42:40
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -94,7 +94,74 @@ const ll INF = 0x3f3f3f3f3f3f3f3f;
 void init() {
 }
 void work() {
-    
+    int n, x;
+    cin >> n >> x;
+    string s;
+    cin >> s;
+    s = '&' + s;
+    int wall_cnt = 0, esc1 = 1;
+    int ans = 0;
+    FOR(i, 1, n + 1) {
+        if (s[i] == '#')
+            wall_cnt++;
+    }
+    if (wall_cnt == 0 || x == 1 || x == n) {
+        cout << 1 << endl;
+        return;
+    }
+    int resc = 1, rpos = -1;
+    FOR(i, x + 1, n + 1) {
+        if (s[i] == '#') {
+            resc = 0;
+            rpos = i;
+            break;
+        }
+    }
+    FOR_R(i, x, 1) {
+        if (s[i] == '#') {
+            rpos = i;
+            if (resc == 0) {
+                esc1 = 0;
+            }
+            break;
+        }
+    }
+    if (esc1) {
+        int o;
+        if (x < rpos)
+            o = x - 1;
+        else
+            o = x + 1;
+        if (o < rpos)
+            ans = min(o, n - rpos + 1) + 1;
+        else
+            ans = min(rpos, n - o + 1) + 1;
+        cout << ans << endl;
+        return;
+    }
+    int li = -1, ri = -1;
+    FOR_R(i, x, 1) {
+        if (s[i] == '#') {
+            li = i;
+            break;
+        }
+    }
+    FOR(i, x + 1, n + 1) {
+        if (s[i] == '#') {
+            ri = i;
+            break;
+        }
+    }
+    if (x - 1 != li && x + 1 != ri) {
+        if (li > n - ri + 1) {
+            ans = min(n - x, li) + 1;
+        } else {
+            ans = min(x - 1, n - ri + 1) + 1;
+        }
+    } else if (x - 1 == li || x + 1 == ri) {
+        ans = min(x - 1, n - x) + 1;
+    }
+    cout << ans << endl;
 }
 signed main() {
     ios::sync_with_stdio(false);

@@ -1,5 +1,5 @@
 // Author: QHZY
-// Create_Time: 2025/08/08 01:09:42
+// Create_Time: 2025/08/10 19:48:07
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -91,10 +91,64 @@ const ll INF = 0x3f3f3f3f3f3f3f3f;
 
 /* ----- ----- ----- main ----- ----- ----- */
 
+const int MAXN = 200005;
+const int LOGN = 18;
+vvi adj(MAXN, vi());
+vvi fa(MAXN, vi(LOGN));
+vi dep(MAXN);
+int n;
 void init() {
 }
+void dfs(int u, int p, int d) {
+    dep[u] = d;
+    fa[u][0] = p;
+    for (int v : adj[u]) {
+        if (v != p) {
+            dfs(v, u, d + 1);
+        }
+    }
+}
+int lca(int u, int v) {
+    if (dep[u] < dep[v])
+        swap(u, v);
+    FOR_R(j, LOGN) {
+        if (dep[u] - (1 << j) >= dep[v]) {
+            u = fa[u][j];
+        }
+    }
+    if (u == v)
+        return u;
+    FOR_R(j, LOGN) {
+        if (fa[u][j] != fa[v][j]) {
+            u = fa[u][j];
+            v = fa[v][j];
+        }
+    }
+    return fa[u][0];
+}
 void work() {
-    
+    cin >> n;
+    FOR(n - 1) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].pb(v);
+        adj[v].pb(u);
+    }
+    dfs(n, n, 0);
+    FOR(j, 1, LOGN) {
+        FOR(i, 1, n + 1) {
+            fa[i][j] = fa[fa[i][j - 1]][j - 1];
+        }
+    }
+    int ans = 0;
+    ans += dep[1] + 1;
+    int nowlca = 1;
+    FOR(k, 2, n + 1) {
+        int lcaa = lca(nowlca, k);
+        ans += dep[lcaa] + 1;
+        nowlca = lcaa;
+    }
+    cout << ans << endl;
 }
 signed main() {
     ios::sync_with_stdio(false);
@@ -102,7 +156,7 @@ signed main() {
     cout.tie(nullptr);
     init();
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
         work();
     return 0;

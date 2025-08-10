@@ -1,5 +1,5 @@
 // Author: QHZY
-// Create_Time: 2025/08/08 01:09:42
+// Create_Time: 2025/08/10 19:28:26
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -94,7 +94,32 @@ const ll INF = 0x3f3f3f3f3f3f3f3f;
 void init() {
 }
 void work() {
-    
+    int n;
+    cin >> n;
+    vi a(n);
+    vi pos(n + 1);
+    FOR(i, n) {
+        cin >> a[i];
+        pos[a[i]] = i;
+    }
+    int ans = 0;
+    int minpos = n;
+    int maxpos = -1;
+    FOR(i, 1, n + 1) {
+        int ii = pos[i];
+        int mini, maxi;
+        if (i == 1) {
+            mini = ii;
+            maxi = ii;
+        } else {
+            mini = min(ii, minpos);
+            maxi = max(ii, maxpos);
+        }
+        ans += (mini + 1) * (n - maxi);
+        minpos = min(minpos, ii);
+        maxpos = max(maxpos, ii);
+    }
+    cout << ans << endl;
 }
 signed main() {
     ios::sync_with_stdio(false);
@@ -102,7 +127,7 @@ signed main() {
     cout.tie(nullptr);
     init();
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
         work();
     return 0;

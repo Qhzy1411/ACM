@@ -1,5 +1,5 @@
 // Author: QHZY
-// Create_Time: 2025/08/08 01:09:42
+// Create_Time: 2025/08/08 12:02:11
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -90,11 +90,43 @@ mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 const ll INF = 0x3f3f3f3f3f3f3f3f;
 
 /* ----- ----- ----- main ----- ----- ----- */
-
+int n, m, k;
+void sol(int i, int x, int y, int nx, int ny, vvc<pii> &mapp) {
+    if (nx <= 0 || nx > n || ny <= 0 || ny > m)
+        return;
+    mapp[nx][ny].fi = mapp[nx][ny].se > x ? mapp[nx][ny].fi : i;
+    mapp[nx][ny].se = mapp[nx][ny].se > x ? mapp[nx][ny].se : x;
+}
+void build(int i, int x, int y, vvc<pii> &mapp) {
+    sol(i, x, y, x, y, mapp);
+    sol(i, x, y, x - 1, y, mapp);
+    FOR(j, -2, 3) {
+        sol(i, x, y, x - 2, y - j, mapp);
+    }
+    FOR(j, -1, 2) {
+        sol(i, x, y, x - 3, y - j, mapp);
+    }
+    sol(i, x, y, x - 4, y, mapp);
+}
 void init() {
 }
 void work() {
-    
+    cin >> n >> m >> k;
+    vvc<pii> mapp(n + 1, vc<pii>(m + 1, mp(0, 0)));
+    int x, y;
+    FOR(i, k) {
+        cin >> x >> y;
+        build(i + 1, x, y, mapp);
+    }
+    FOR(i, 1, n + 1) {
+        FOR(j, 1, m + 1) {
+            if (mapp[i][j].fi == 0)
+                cout << '.';
+            else
+                cout << mapp[i][j].fi;
+        }
+        cout << endl;
+    }
 }
 signed main() {
     ios::sync_with_stdio(false);

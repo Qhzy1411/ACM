@@ -1,5 +1,5 @@
 // Author: QHZY
-// Create_Time: 2025/08/08 01:09:42
+// Create_Time: 2025/08/10 19:00:03
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -94,7 +94,13 @@ const ll INF = 0x3f3f3f3f3f3f3f3f;
 void init() {
 }
 void work() {
-    
+    int ans=0,t;
+    FOR(i,4){
+        cin>>t;
+        if(t==i+1)
+        ans++;
+    }
+    cout<<ans<<endl;
 }
 signed main() {
     ios::sync_with_stdio(false);
@@ -102,7 +108,7 @@ signed main() {
     cout.tie(nullptr);
     init();
     int T = 1;
-    cin >> T;
+    //cin >> T;
     while (T--)
         work();
     return 0;

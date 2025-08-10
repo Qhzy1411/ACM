@@ -48,11 +48,11 @@ signed main() {
     int T = 1;
     cin >> T;
     int N = 1e7;
-    vector<int> pri;
+    vector<int> primes;
     np[1] = 1;
     for (int i = 2; i <= N; i++) {
         if (!np[i]) {
-            pri.push_back(i);
+            primes.push_back(i);
             for (int k = i * 2; k <= N; k += i) {
                 np[k] = 1;
             }
@@ -68,11 +68,11 @@ signed main() {
         num = 0;
         while (temp > 1) {
             int flag = 1;
-            while (temp % pri[k] == 0) {
-                yznum[pri[k]]++;
-                temp /= pri[k];
+            while (temp % primes[k] == 0) {
+                yznum[primes[k]]++;
+                temp /= primes[k];
                 if (flag) {
-                    yz.push_back(pri[k]);
+                    yz.push_back(primes[k]);
                     num++;
                     flag = 0;
                 }

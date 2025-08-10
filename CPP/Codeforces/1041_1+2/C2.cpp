@@ -1,5 +1,5 @@
 // Author: QHZY
-// Create_Time: 2025/08/08 01:09:42
+// Create_Time: 2025/08/07 23:34:03
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -94,7 +94,47 @@ const ll INF = 0x3f3f3f3f3f3f3f3f;
 void init() {
 }
 void work() {
-    
+    int n, k;
+    cin >> n >> k;
+    vi a(n), b(n);
+    int origin = 0;
+    vc<pii> dis(n);
+    FOR(i, n)
+    cin >> a[i];
+    FOR(i, n)
+    cin >> b[i];
+    FOR(i, n) {
+        if (a[i] > b[i])
+            swap(a[i], b[i]);
+        origin += b[i] - a[i];
+        dis[i] = {a[i], b[i]};
+    }
+    sort(all(dis));
+    int count = 0;
+    vi gaps;
+    int i = 0;
+    while (i < n) {
+        count++;
+        int maxr = dis[i].se;
+        int j = i + 1;
+        while (j < n && dis[j].fi <= maxr) {
+            maxr = max(maxr, dis[j].se);
+            j++;
+        }
+        if (j < n) {
+            gaps.pb(dis[j].fi - maxr);
+        }
+        i = j;
+    }
+    int zero = n - count;
+    int increase = 0;
+    if (!zero) {
+        sort(all(gaps));
+        if (size(gaps) > 0)
+            increase = gaps[0] * 2;
+    }
+    int ans = origin + increase;
+    cout << ans << endl;
 }
 signed main() {
     ios::sync_with_stdio(false);

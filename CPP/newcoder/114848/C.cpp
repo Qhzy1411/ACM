@@ -1,5 +1,5 @@
 // Author: QHZY
-// Create_Time: 2025/08/08 01:09:42
+// Create_Time: 2025/08/10 19:09:52
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -94,7 +94,21 @@ const ll INF = 0x3f3f3f3f3f3f3f3f;
 void init() {
 }
 void work() {
-    
+    int n, t, ans = 0;
+    cin >> n;
+    vi count(n + 1);
+    FOR(i, 2 * n) {
+        cin >> t;
+        count[t]++;
+    }
+    FOR(i, n + 1) {
+        if (count[i] <= 2)
+            ans += count[i];
+        else {
+            ans += 2;
+        }
+    }
+    cout << ans << endl;
 }
 signed main() {
     ios::sync_with_stdio(false);
@@ -102,7 +116,7 @@ signed main() {
     cout.tie(nullptr);
     init();
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
         work();
     return 0;
