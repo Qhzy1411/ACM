@@ -1,12 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
-using ll = long long;
 using vi = vector<int>;
 template <class T>
 using vc = vector<T>;
 
 // 线性筛  时间：O(n)
-const ll N = 1e6 + 5;
+const int N = 1e6 + 5;
 
 vi primes;
 vc<bool> not_prime(N, 0);
