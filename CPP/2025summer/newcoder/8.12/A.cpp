@@ -1,78 +1,178 @@
+// Author: QHZY
 #include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
+
+void YES(bool t = 1) { cout << (t ? "YES\n" : "NO\n"); }
+void NO(bool t = 1) { YES(!t); }
+void Yes(bool t = 1) { cout << (t ? "Yes\n" : "No\n"); }
+void No(bool t = 1) { Yes(!t); }
+void yes(bool t = 1) { cout << (t ? "yes\n" : "no\n"); }
+void no(bool t = 1) { yes(!t); }
+
+using i32 = int;
+using i64 = long long;
+using i128 = __int128;
+using u32 = unsigned;
+using u64 = unsigned long long;
+using u128 = unsigned __int128;
+using f32 = float;
+using f64 = double;
+using f128 = long double;
+
+// 2进制中1的个数
+i32 popcnt(i32 x) { return __builtin_popcount(x); }
+i32 popcnt(u32 x) { return __builtin_popcount(x); }
+i32 popcnt(i64 x) { return __builtin_popcountll(x); }
+i32 popcnt(u64 x) { return __builtin_popcountll(x); }
+// 2进制中1的个数的奇偶性(1为奇数，0为偶)
+i32 popcnt_sgn(i32 x) { return (__builtin_parity(u32(x)) & 1 ? 1 : 0); }
+i32 popcnt_sgn(u32 x) { return (__builtin_parity(x) & 1 ? 1 : 0); }
+i32 popcnt_sgn(i64 x) { return (__builtin_parityll(u64(x)) & 1 ? 1 : 0); }
+i32 popcnt_sgn(u64 x) { return (__builtin_parityll(x) & 1 ? 1 : 0); }
+// 2进制中1的最高有效位 (0, 1, 2, 3, 4) -> (-1, 0, 1, 1, 2)
+i32 topbit(i32 x) { return (x == 0 ? -1 : 31 - __builtin_clz(x)); }
+i32 topbit(u32 x) { return (x == 0 ? -1 : 31 - __builtin_clz(x)); }
+i32 topbit(i64 x) { return (x == 0 ? -1 : 63 - __builtin_clzll(x)); }
+i32 topbit(u64 x) { return (x == 0 ? -1 : 63 - __builtin_clzll(x)); }
+// 2进制中1的最低有效位 (0, 1, 2, 3, 4) -> (-1, 0, 1, 0, 2)
+i32 lowbit(i32 x) { return (x == 0 ? -1 : __builtin_ctz(x)); }
+i32 lowbit(u32 x) { return (x == 0 ? -1 : __builtin_ctz(x)); }
+i32 lowbit(i64 x) { return (x == 0 ? -1 : __builtin_ctzll(x)); }
+i32 lowbit(u64 x) { return (x == 0 ? -1 : __builtin_ctzll(x)); }
+
+using ll = long long;
 #define int ll
-int root;
-vector<int> num(2e5 + 5);
-int dfs(vector<int> &max_h, vector<int> &fa, vector<pair<int, int>> &son, int now_h, int node) {
-    num[now_h]++;
-    int h = now_h;
-    auto [ls, rs] = son[node];
-    if (ls)
-        h = max(h, dfs(max_h, fa, son, now_h + 1, ls));
-    if (rs)
-        h = max(h, dfs(max_h, fa, son, now_h + 1, rs));
-    max_h[node] = h;
-    return h;
-}
-int dfs2(vector<int> &max_h, int need_h, int node, vector<pair<int, int>> &son) {
-    if (node == 0)
-        return max(2 * need_h - 1, 0ll);
-    int ans = 0;
-    auto [ls, rs] = son[node];
-    if (max_h[ls] > max_h[rs]) {
-        ans += dfs2(max_h, need_h - 1, ls, son);
-        ans += dfs2(max_h, need_h - 2, rs, son);
-    } else {
-        ans += dfs2(max_h, need_h - 1, rs, son);
-        ans += dfs2(max_h, need_h - 2, ls, son);
+using ull = unsigned long long;
+using ld = long double;
+#define double ld
+
+using vi = vector<int>;
+using vvi = vector<vector<int>>;
+using pii = pair<int, int>;
+using piii = pair<int, pii>;
+
+template <class T>
+using vc = vector<T>;
+template <class T>
+using vvc = vector<vc<T>>;
+template <class T>
+using pq_max = priority_queue<T>;
+template <class T>
+using pq_min = priority_queue<T, vector<T>, greater<T>>;
+
+#define FOR1(a) for (ll _ = 0; _ < ll(a); _++)
+#define FOR2(i, a) for (ll i = 0; i < ll(a); i++)
+#define FOR3(i, a, b) for (ll i = a; i < ll(b); i++)
+#define FOR4(i, a, b, c) for (ll i = a; i < ll(b); i += (c))
+#define FOR1_R(a) for (ll _ = (a) - 1; _ >= ll(0); _--)
+#define FOR2_R(i, a) for (ll i = (a) - 1; i >= ll(0); i--)
+#define FOR3_R(i, a, b) for (ll i = (a) - 1; i >= ll(b); i--)
+#define FOR4_R(i, a, b, c) for (ll i = (a) - 1; i >= ll(b); i -= (c))
+#define overload4(a, b, c, d, e, ...) e
+#define FOR(...) overload4(__VA_ARGS__, FOR4, FOR3, FOR2, FOR1)(__VA_ARGS__)
+#define FOR_R(...) overload4(__VA_ARGS__, FOR4_R, FOR3_R, FOR2_R, FOR1_R)(__VA_ARGS__)
+
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+#define size(x) ll(x.size())
+
+#define elif else if
+#define endl '\n'
+#define mp make_pair
+#define mt make_tuple
+#define pb push_back
+#define eb emplace_back
+#define fi first
+#define se second
+
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+const ll INF = 0x3f3f3f3f3f3f3f3f;
+
+/* ----- ----- ----- main ----- ----- ----- */
+
+const int H = 35;
+vi minn, sz;
+vc<pii> chi;
+vvi mem;
+vi solve(int u) {
+    if (u == 0)
+        return minn;
+    if (!mem[u].empty())
+        return mem[u];
+    auto [l, r] = chi[u];
+    auto dpl = solve(l);
+    auto dpr = solve(r);
+    vc<int> res(H + 1, INF);
+    FOR(h, H + 1) {
+        int cost1 = sz[u];
+        if (minn[h] < INF) {
+            cost1 += minn[h];
+        } else {
+            cost1 = INF;
+        }
+        int cost2 = INF;
+        if (h > 0) {
+            int cost3 = INF;
+            if (dpl[h - 1] < INF && dpr[h - 1] < INF) {
+                cost3 = min(cost3, dpl[h - 1] + dpr[h - 1]);
+            }
+            if (h - 2 >= 0) {
+                if (dpl[h - 1] < INF && dpr[h - 2] < INF) {
+                    cost3 = min(cost3, dpl[h - 1] + dpr[h - 2]);
+                }
+                if (dpl[h - 2] < INF && dpr[h - 1] < INF) {
+                    cost3 = min(cost3, dpl[h - 2] + dpr[h - 1]);
+                }
+            }
+            cost2 = cost3;
+        }
+        res[h] = min(cost1, cost2);
     }
-    return ans;
+    return mem[u] = res;
 }
-bool f(int mid, vector<int> &max_h, vector<pair<int, int>> &son) {
-    if (dfs2(max_h, mid, root, son) + num[mid + 1] <= dfs2(max_h, mid + 1, root, son))
-        return true;
-    return false;
+void dfs(int u) {
+    if (u == 0)
+        return;
+    sz[u] = 1;
+    auto [l, r] = chi[u];
+    dfs(l);
+    dfs(r);
+    sz[u] += sz[l] + sz[r];
+}
+void init() {
+    minn.assign(H + 1, 0);
+    minn[1] = 1;
+    FOR(h, 2, H + 1) {
+        minn[h] = 1 + minn[h - 1] + minn[h - 2];
+        if (minn[h] > 400000)
+            minn[h] = INF;
+    }
 }
 void work() {
     int n;
     cin >> n;
-    for (int i = 1; i <= n; i++)
-        num[i] = 0;
-    vector<int> max_h(n + 1);
-    vector<pair<int, int>> son(n + 1);
-    vector<int> fa(n + 1);
-    for (int i = 1; i <= n; i++) {
-        int ls, rs;
-        cin >> ls >> rs;
-        fa[ls] = i;
-        fa[rs] = i;
-        son[i] = {ls, rs};
+    chi.assign(n + 1, {0, 0});
+    FOR(i, 1, n + 1) {
+        cin >> chi[i].fi >> chi[i].se;
     }
-    for (int i = 1; i <= n; i++)
-        if (fa[i] == 0) {
-            root = i;
-            break;
-        }
-    dfs(max_h, fa, son, 1, root);
-    int l = 1, r = max_h[1];
-    while (l <= r) {
-        int mid = (l + r) >> 1;
-        if (f(mid, max_h, son))
-            r = mid - 1;
-        else
-            l = mid + 1;
+    sz.assign(n + 1, 0);
+    mem.assign(n + 1, vi());
+    dfs(1);
+    auto fdp = solve(1);
+    int ans = INF;
+    for (int cost : fdp) {
+        ans = min(ans, cost);
     }
-    int ans = dfs2(max_h, l, root, son);
-    for (int i = l + 1; i <= n; i++)
-        ans += num[i];
     cout << ans << endl;
 }
 signed main() {
-    cin.tie(0)->sync_with_stdio(0);
-    int _;
-    cin >> _;
-    while (_--)
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    init();
+    int T = 1;
+    cin >> T;
+    while (T--)
         work();
     return 0;
 }

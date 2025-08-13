@@ -1,5 +1,5 @@
 // Author: QHZY
-// Create_Time: 2025/08/12 12:54:31
+// Create_Time: 2025/08/13 14:18:49
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -86,27 +86,65 @@ using pq_min = priority_queue<T, vector<T>, greater<T>>;
 #define fi first
 #define se second
 
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 const ll INF = 0x3f3f3f3f3f3f3f3f;
-const ll MOD = 998244353;
 
 /* ----- ----- ----- main ----- ----- ----- */
-
-void init() {
+int ans, n, m, now;
+vc<pii> ansedge;
+vi p, not_visited_neighbors;
+void dfs(vc<map<int, bool>> &adj, int node) {
+    for (auto i : adj[p[node]]) {
+        if (i.second)
+            not_visited_neighbors[i.first]--;
+    }
+    while (not_visited_neighbors[p[node]]) {
+        if (now == n - 1)
+            break;
+        if (!adj[p[now + 1]][p[node]]) {
+            ans++;
+            ansedge.push_back({p[node], p[now + 1]});
+        }
+        now++;
+        dfs(adj, now);
+    }
 }
 void work() {
-    int n;
-    cin >> n;
-    vi p(n);
-    FOR(i, n)
-    cin >> p[i];
+    now = -1;
+    int u, v;
+    cin >> n >> m;
+    not_visited_neighbors.assign(n + 1, 0);
+    p.assign(n + 1, 0);
+    vc<map<int, bool>> adj(n + 1);
+    FOR(m) {
+        cin >> u >> v;
+        if (adj[u][v] && adj[v][u]) {
+        }
+        else {
+            adj[u][v] = 1;
+            adj[v][u] = 1;
+            not_visited_neighbors[u]++;
+            not_visited_neighbors[v]++;
+        }
+    }
+    FOR(i, n) {
+        cin >> p[i];
+    }
+    while (now != n - 1) {
+        now++;
+        dfs(adj, now);
+    }
+    cout << ans << endl;
+    FOR(i, ans) {
+        cout << ansedge[i].fi << ' ' << ansedge[i].se << endl;
+    }
 }
 signed main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    init();
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
         work();
     return 0;

@@ -1,5 +1,5 @@
 // Author: QHZY
-// Create_Time: 2025/08/12 12:54:31
+// Create_Time: 2025/08/12 15:18:02
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -48,7 +48,8 @@ using ld = long double;
 #define double ld
 
 using vi = vector<int>;
-using vvi = vector<vector<int>>;
+using vvi = vector<vi>;
+using vvvi = vector<vvi>;
 using pii = pair<int, int>;
 using piii = pair<int, pii>;
 
@@ -86,27 +87,102 @@ using pq_min = priority_queue<T, vector<T>, greater<T>>;
 #define fi first
 #define se second
 
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 const ll INF = 0x3f3f3f3f3f3f3f3f;
-const ll MOD = 998244353;
 
 /* ----- ----- ----- main ----- ----- ----- */
 
-void init() {
+const int MOD = 998244353;
+int days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+bool run(int y) {
+    return (y % 4 == 0 && y % 100 != 0) || (y % 400 == 0);
+}
+int getday(int y, int m) {
+    if (m == 2 && run(y))
+        return 29;
+    return days[m - 1];
 }
 void work() {
     int n;
     cin >> n;
-    vi p(n);
-    FOR(i, n)
-    cin >> p[i];
+    string s;
+    cin >> s;
+    int ans = 0;
+    vi dp1(10);
+    vi dp2(100);
+    vi dp3(1000);
+    vi dp4(2); // 1 为闰年，0 非闰年
+    vvi dp5(2, vi(2));
+    vvi dp6(2, vi(13));
+    vvvi dp7(2, vvi(13, vi(4)));
+    for (char sc : s) {
+        int c = sc - '0';
+        FOR(y, 2) {
+            FOR(m, 1, 13) {
+                FOR(d1, 4) {
+                    if (dp7[y][m][d1] == 0)
+                        continue;
+                    int d = d1 * 10 + c;
+                    if (d >= 1 && d <= getday((y == 1) ? 4 : 1, m)) {
+                        ans = (ans + dp7[y][m][d1]) % MOD;
+                    }
+                }
+            }
+        }
+        FOR(y, 2) {
+            FOR(m, 1, 13) {
+                if (dp6[y][m] == 0)
+                    continue;
+                if ((c >= 0 && c <= 2) || (c == 3 && m != 2)) {
+                    dp7[y][m][c] = (dp7[y][m][c] + dp6[y][m]) % MOD;
+                }
+            }
+        }
+        FOR(y, 2) {
+            FOR(m1, 2) {
+                if (dp5[y][m1] == 0)
+                    continue;
+                int m = m1 * 10 + c;
+                if (m >= 1 && m <= 12) {
+                    dp6[y][m] = (dp6[y][m] + dp5[y][m1]) % MOD;
+                }
+            }
+        }
+        FOR(y, 2) {
+            if (dp4[y] == 0)
+                continue;
+            if (c <= 1) {
+                dp5[y][c] = (dp5[y][c] + dp4[y]) % MOD;
+            }
+        }
+        FOR(y3, 1000) {
+            if (dp3[y3] == 0)
+                continue;
+            if (y3 == 0 && c == 0)
+                continue;
+            int y = run((y3 * 10 + c) % 400) ? 1 : 0;
+            dp4[y] = (dp4[y] + dp3[y3]) % MOD;
+        }
+        FOR(y2, 100) {
+            if (dp2[y2] == 0)
+                continue;
+            dp3[y2 * 10 + c] = (dp3[y2 * 10 + c] + dp2[y2]) % MOD;
+        }
+        FOR(y1, 10) {
+            if (dp1[y1] == 0)
+                continue;
+            dp2[y1 * 10 + c] = (dp2[y1 * 10 + c] + dp1[y1]) % MOD;
+        }
+        dp1[c] = (dp1[c] + 1) % MOD;
+    }
+    cout << ans << endl;
 }
 signed main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    init();
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
         work();
     return 0;

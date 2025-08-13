@@ -1,0 +1,1 @@
+g++ -O3 -std=c++17 -finput-charset=UTF-8 -fexec-charset=UTF-8 checker.cpp -o checker.exe

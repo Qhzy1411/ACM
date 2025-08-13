@@ -1,5 +1,5 @@
 // Author: QHZY
-// Create_Time: 2025/08/12 12:54:31
+// Create_Time: 2025/08/13 13:37:39
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -86,19 +86,37 @@ using pq_min = priority_queue<T, vector<T>, greater<T>>;
 #define fi first
 #define se second
 
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 const ll INF = 0x3f3f3f3f3f3f3f3f;
-const ll MOD = 998244353;
 
 /* ----- ----- ----- main ----- ----- ----- */
 
 void init() {
 }
 void work() {
-    int n;
-    cin >> n;
-    vi p(n);
-    FOR(i, n)
-    cin >> p[i];
+    int l, r;
+    cin >> l >> r;
+    if (l & 1) {
+        if (l * 2 <= r) {
+            cout << "Alice" << endl;
+        } else {
+            if ((r - l) & 1) {
+                cout << "Bob" << endl;
+            } else {
+                cout << "Alice" << endl;
+            }
+        }
+    } else {
+        if ((l + 1) * 2 <= r) {
+            cout << "Bob" << endl;
+        } else {
+            if ((r - l) & 1) {
+                cout << "Bob" << endl;
+            } else {
+                cout << "Alice" << endl;
+            }
+        }
+    }
 }
 signed main() {
     ios::sync_with_stdio(false);
