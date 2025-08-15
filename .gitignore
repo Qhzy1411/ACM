@@ -1,4 +1,11 @@
+# 排除压缩文件
+*.zip
+*.rar
+*.7z
 # 排除产生的exe编译文件
 exe/
 # 排除cph插件测试数据
 .cph/
+# 排除Debug产生的调试数据以及测试点数据
+CPP/0Debug/data/
+CPP/0Debug/testcase/

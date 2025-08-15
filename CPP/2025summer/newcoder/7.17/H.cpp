@@ -25,7 +25,8 @@ struct ConvexHull {
         hull.push_back(l);
     }
     ll query(ll x) {
-        if (hull.empty()) return INF;
+        if (hull.empty())
+            return INF;
         int l = 0, r = hull.size() - 1;
         while (l < r) {
             int m = (l + r) / 2;
@@ -38,7 +39,7 @@ struct ConvexHull {
     }
 };
 
-void solve() {
+void work() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     int t;
@@ -60,7 +61,8 @@ void solve() {
         while (!pq.empty()) {
             auto [sum_t, max_w, u] = pq.top();
             pq.pop();
-            if (u == n) continue;
+            if (u == n)
+                continue;
             bool skip = false;
             for (auto [s, w] : dist[u]) {
                 if (s <= sum_t && w >= max_w) {
@@ -70,7 +72,8 @@ void solve() {
                     }
                 }
             }
-            if (skip) continue;
+            if (skip)
+                continue;
             for (auto [v, t_i, w_i] : adj[u]) {
                 ll new_sum_t = sum_t + t_i;
                 ll new_max_w = max(max_w, w_i);
@@ -128,6 +131,6 @@ void solve() {
     }
 }
 int main() {
-    solve();
+    work();
     return 0;
 }

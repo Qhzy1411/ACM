@@ -13,97 +13,45 @@ signed main() {
     int T = 1;
     cin >> T;
     while (T--) {
-        int n;
-        string s;
-        cin >> n >> s;
-        s = '0' + s;
-        int q0 = 1;
+        int n, m;
+        cin >> n >> m;
+        vector<int> a(n + 1);
+        int maxai = 0;
         for (int i = 1; i <= n; i++) {
-            if (s[i] == '1') {
-                q0 = 0;
-                break;
-            }
+            cin >> a[i];
+            maxai = max(maxai, a[i]);
         }
-        if (q0) {
-            cout << "Yes" << endl;
-            continue;
-        }
-        if (n >= 1 && s[n - 1] == '0' && s[n] == '0') {
-            cout << "Yes" << endl;
-            continue;
-        }
-        if (n < 5) {
-            if (n < 4) {
-                int f = 1;
-                for (int i = 1; i <= n; i++) {
-                    if (s[i] == '1') {
-                        f = 0;
-                        break;
-                    }
-                }
-                if (f) {
-                    cout << "Yes" << endl;
-                } else {
-                    if (n == 1 || n == 2) {
-                        cout << "No" << endl;
-                    } else {
-                        if (s[2] == '1' || s[3] == '1') {
-                            cout << "No" << endl;
-                        } else {
-                            cout << "Yes" << endl;
-                        }
-                    }
-                }
-                continue;
-            }
-            if (s[n] == '0' && s[n - 1] == '0') {
-                cout << "Yes" << endl;
-            } else {
-                if (s[n - 3] == '0' || (s[n - 3] == '1' && s[n - 2] == '0' && s[n - 1] == '0')) {
-                    cout << "No" << endl;
-                } else {
-                    cout << "Yes" << endl;
-                }
-            }
-            continue;
-        }
-        vector<int> cnt, st;
-        int sz = 0, sta, endd;
+        vector<vector<vector<pair<int, int>>>> dp(n + 1, vector<vector<pair<int, int>>>(maxai + 1, vector<pair<int, int>>(2)));
         for (int i = 1; i <= n; i++) {
-            if (s[i] == '1' && s[i - 1] == '0') {
-                sz++;
-                st.push_back(i);
-                cnt.push_back(1);
-            } else if (s[i] == '1' && s[i - 1] == '1') {
-                cnt[sz - 1]++;
+            for (int j = 0; j <= maxai; j++) {
+                if (j < a[i]) {
+                    dp[i][j][0].first = INF;
+                    dp[i][j][0].second = INF;
+                    dp[i][j][1].second = maxai - a[i];
+                    dp[i][j][1].first = min(dp[i - 1][j][0].first + max(0LL, dp[i][j][1].second - dp[i - 1][j][0].second), dp[i - 1][j][1].first + max(0LL, dp[i][j][1].second - dp[i - 1][j][1].second));
+                } else {
+                    int temp1 = j - a[i], temp2 = maxai - a[i];
+                    dp[i][j][0].first = min(max(temp1 - dp[i - 1][j][0].second, 0LL) + dp[i - 1][j][0].first, max(temp1 - dp[i - 1][j][1].second, 0LL) + dp[i - 1][j][1].first);
+                    dp[i][j][0].second = temp1;
+                    dp[i][j][1].first = min(max(temp2 - dp[i - 1][j][0].second, 0LL) + dp[i - 1][j][0].first, max(temp2 - dp[i - 1][j][1].second, 0LL) + dp[i - 1][j][1].first);
+                    dp[i][j][1].second = temp2;
+                }
             }
         }
-        sta = st[0];
-        for (int i = 0; i < sz - 1; i++) {
-            int en = st[i] + 2 * (cnt[i] - 1);
-            // cout<<"st:"<<st[i]<<' '<<"cnt:"<<cnt[i]<<' '<<"en:"<<en<<endl;
-            if (en >= st[i + 1] - 1) {
-                int d = en - st[i + 1] + 1;
-                cnt[i + 1] += d + 1;
-                st[i + 1] -= d + 1;
-            } else {
-                if (en < st[i + 1] - 2)
-                    sta = st[i + 1];
+
+        int ans = 1e9;
+        if (m == 2) {
+            for (int x = 0; x <= maxai; x++) {
+                int k = 0;
+                k = min(dp[n][x][0].first, dp[n][x][1].first);
+                ans = min(ans, k);
             }
-        }
-        for (int i = n; i >= 0; i--) {
-            if (s[i] == '1') {
-                endd = i;
-                break;
-            }
-        }
-        // cout<<"st:"<<st[sz-1]<<' '<<"cnt:"<<cnt[sz-1]<<' '<<"en:"<<en<<endl;
-        // cout<<en<<' '<<tar<<endl;
-        if (endd <= n - 2 || (endd > n - 2 && sta <= n - 3)) {
-            cout << "Yes" << endl;
         } else {
-            cout << "No" << endl;
+            int k = 0;
+            k = dp[n][maxai][1].first;
+            ans = min(ans, k);
         }
+        cout << ans << endl;
     }
     return 0;
 }
