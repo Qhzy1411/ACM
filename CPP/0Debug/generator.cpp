@@ -30,15 +30,15 @@ ll rand_int(ll L, ll R) {
  */
 void generate_case() {
     // 题目约束：1 <= n <= 400, 1 <= m <= 2, 0 <= a_i <= 100
-    int n = rand_int(1, 5);
-    int m = rand_int(1, 2);
+    int n = rand_int(400, 400);
+    int m = rand_int(2, 2);
 
     // 打印 n 和 m
     cout << n << " " << m << "\n";
 
     // 打印 n 个 affection 值
     for (int i = 0; i < n; ++i) {
-        cout << rand_int(0, 30) << (i == n - 1 ? "" : " ");
+        cout << rand_int(0, 100) << (i == n - 1 ? "" : " ");
     }
     cout << "\n";
 }
@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
     cin.tie(NULL);
 
     // 确定测试用例数量 T
-    int T = rand_int(1, 10);
+    int T = rand_int(10, 10);
 
     // 打印测试用例总数 T
     cout << T << "\n";

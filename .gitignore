@@ -3,9 +3,19 @@
 *.rar
 *.7z
 # 排除产生的exe编译文件
-exe/
+/CPP/**/exe/
+# 排除.log文件
+*.log
 # 排除cph插件测试数据
 .cph/
-# 排除Debug产生的调试数据以及测试点数据
-CPP/0Debug/data/
-CPP/0Debug/testcase/
+# 排除Debug产生的各种数据
+/CPP/0Debug/*.exe
+!/CPP/0Debug/checker.exe
+/CPP/0Debug/std.cpp
+/CPP/0Debug/test.cpp
+/CPP/0Debug/data/
+/CPP/0Debug/testcase/
+# 排除出题产生的.html文件
+/Problems/*.html
+# 排除出题的测试点数据
+/Problems/**/data/
